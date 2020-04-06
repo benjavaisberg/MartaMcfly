@@ -52,13 +52,24 @@ var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 // Append <circle> to <g>
 var circles = g.selectAll("circle")
-    .data(data)
+    .data(destinations)
     .enter()
     .append("circle")
     .style("fill", "rgba(255, 255, 255, .5)");
 
+// handle mouse events on circles
 circles.on("mouseenter", function() { return d3.select(this).style("opacity", "0"); });
-circles.on("mouseleave", function() { return d3.select(this).style("opacity", "1"); });
+circles.on("mouseleave", function() { return d3.select(this).style("opacity", "0.5"); });
+
+
+// function mouseEnter(d) {
+//     console.log(d.name);
+//     var hovered = d3.select(this);
+//     hovered.classed('hovered', true);
+//     hovered.append('text')
+//         .attr('class', 'value')
+//         .text(d.name);
+// }
 
 function update() {
     translateSVG()
