@@ -62,13 +62,35 @@ var circles = g.selectAll("circle")
 
 
 // handle mouse events on circles
-circles.on("mouseenter", function() { return d3.select(this).style("opacity", "0");});
-circles.on("mouseleave", function() { return d3.select(this).style("opacity", "0.5"); });
+circles.on("mousedown", function(d) {
+    return tooltip.text(d.name)
+            .style("visibility", "visible")
+            .style("left", (d3.event.pageX - 30) + "px")
+            .style("top", (d3.event.pageY - 12) + "px");
+    });
 
+circles.on("mouse", function() { return d3.select(this).style("opacity", "0.5"); });
+
+var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden");
 
 // function mouseEnter() {
-
+//         tooltip.text(circles.name)
+//             .style("visibility", "visible")
+//             .style("left", (d3.event.pageX - 100) + "px")
+//             .style("top", (d3.event.pageY - 100) + "px");
 // }
+
+
+// function(d) { 
+//     return tooltip.text(d.name)
+//             .style("visibility", "visible")
+//             .style("left", (d3.event.pageX - 34) + "px")
+//             .style("top", (d3.event.pageY - 12) + "px");
+//     }
 
 
 function update() {
@@ -76,6 +98,7 @@ function update() {
     circles.attr("cx", function(d) { return map.latLngToLayerPoint(d.LatLng).x; })
     circles.attr("cy", function(d) { return map.latLngToLayerPoint(d.LatLng).y; })
     circles.attr("r", function(d) { return 0.005 * Math.pow(2, map.getZoom()); })
+    tooltip.style("visibility", "hidden");
 }
 
 // Adjust the circles when the map is moved
