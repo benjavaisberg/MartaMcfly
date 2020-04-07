@@ -22,13 +22,10 @@ var destinations = [
 
     ];
 
-
-
-
 //initiate mapbox object
 L.mapbox.accessToken = 'pk.eyJ1IjoiYmVuamF2YWlzYmVyZyIsImEiOiJjazhuZmw0c3YweHd6M2Vtd3NscXp4OTg2In0.TIzfy5d9qr7V6CQLJHczGg';
 var map = new L.mapbox.map('map')
-    .setView(gt_center, 14)
+    .setView(gt_center, 11)
     .setMaxBounds(maxBounds)
     .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'))
     .setMinZoom(11);
@@ -37,7 +34,7 @@ var map = new L.mapbox.map('map')
 // create circles on the map by coordinates
 destinations.forEach(function(d) {
     d.LatLng = new L.LatLng(d.lat, d.lng);
-    map.addLayer(L.circle([d.lat, d.lng], 500));
+    map.addLayer(L.circle([d.lat, d.lng], 500, {color: d.name == "Georgia Tech/Midtown" ? 'red' : '#3388ff'}))
 });
 
 
@@ -55,21 +52,24 @@ var circles = g.selectAll("circle")
     .data(destinations)
     .enter()
     .append("circle")
-    .style("fill", "rgba(255, 255, 255, .5)");
+    .style("fill", function (d) {
+        if (d.name == "Georgia Tech/Midtown") {
+            return "rgba(255, 0, 0, .5)";
+        } else {
+            return "rgba(255, 255, 255, .5)";
+        }
+    });
+
 
 // handle mouse events on circles
-circles.on("mouseenter", function() { return d3.select(this).style("opacity", "0"); });
+circles.on("mouseenter", function() { return d3.select(this).style("opacity", "0");});
 circles.on("mouseleave", function() { return d3.select(this).style("opacity", "0.5"); });
 
 
-// function mouseEnter(d) {
-//     console.log(d.name);
-//     var hovered = d3.select(this);
-//     hovered.classed('hovered', true);
-//     hovered.append('text')
-//         .attr('class', 'value')
-//         .text(d.name);
+// function mouseEnter() {
+
 // }
+
 
 function update() {
     translateSVG()
@@ -89,7 +89,7 @@ function translateSVG() {
     svg.attr("viewBox", function() {
       return "" + viewBoxLeft + " " + viewBoxTop + " " + window.innerWidth + " " + window.innerHeight;
     });
-    // Adding the style attribute to our SVG to transkate it
+    // Adding the style attribute to our SVG to translate it
     svg.attr("style", function() {
       return "transform: translate3d(" + viewBoxLeft + "px, " + viewBoxTop + "px, 0px);";
     });
@@ -98,10 +98,6 @@ function translateSVG() {
 // Re-draw on reset, this keeps the markers where they should be on reset/zoom
 map.on("moveend", update);
 update();
-
-
-
-
 
 
 
