@@ -7,20 +7,115 @@ var maxBounds = L.latLngBounds(southWest, northEast);
 
 var destinations = [
 
-        {"name": "Doraville", lat: 33.903145, lng: -84.280132},
-        {"name": "Buckhead", lat: 33.849121, lng: -84.368338},
-        {"name": "Little Five Points", lat: 33.765097, lng: -84.349290},
-        {"name": "Inman Park", lat: 33.757950, lng: -84.352598},
-        {"name": "Edgewood", lat: 33.754856, lng: -84.340974},
-        {"name": "Old Fourth Ward", lat: 33.764145, lng: -84.371331},
-        {"name": "Decatur", lat: 33.775295, lng: -84.282240},
-        {"name": "Airport", lat: 33.641215, lng: -84.428073},
-        {"name": "West Manor", lat: 33.736125, lng: -84.493658},
-        {"name": "Georgia Tech/Midtown", lat: 33.774841, lng: -84.396384},
-        {"name": "Toco Hills", lat: 33.815524, lng: -84.312671},
-        {"name": "Sandy Springs", lat: 33.930876, lng: -84.373602}
-
+        {"name": "Doraville", lat: 33.903145, lng: -84.280132,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Buckhead", lat: 33.849121, lng: -84.368338,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Little Five Points", lat: 33.765097, lng: -84.349290,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Inman Park", lat: 33.757950, lng: -84.352598,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Edgewood", lat: 33.754856, lng: -84.340974,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Old Fourth Ward", lat: 33.764145, lng: -84.371331,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Decatur", lat: 33.775295, lng: -84.282240,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Airport", lat: 33.641215, lng: -84.428073,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "West Manor", lat: 33.736125, lng: -84.493658,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Georgia Tech/Midtown", lat: 33.774841, lng: -84.396384,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Toco Hills", lat: 33.815524, lng: -84.312671,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Sandy Springs", lat: 33.930876, lng: -84.373602,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        }
     ];
+
+
+//Create scales for charts
+// var yScale = d3.scaleBand()
+//     .domain(['May', 'June', 'July', 'August'])
+//     .rangeRound([40,260])
+//     .padding(0.5);
+
+// var wScale = d3.scaleLinear()
+//     .domain([0, 60)
+//     .range([0,300]);
+
 
 //initiate mapbox object
 L.mapbox.accessToken = 'pk.eyJ1IjoiYmVuamF2YWlzYmVyZyIsImEiOiJjazhuZmw0c3YweHd6M2Vtd3NscXp4OTg2In0.TIzfy5d9qr7V6CQLJHczGg';
@@ -44,6 +139,11 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg")
     .attr("width", window.innerWidth)
     .attr("height", window.innerHeight);
 
+// var innerSVG = d3.select("travel-info").append("svg")
+//       .attr('class', 'graph-svg')
+//       .attr('width',window.innerWidth / 2)
+//       .attr('height',window.innerHeight / 2);
+
 // Append <g> to <svg>
 var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
@@ -60,38 +160,21 @@ var circles = g.selectAll("circle")
         }
     });
 
-
-// handle mouse events on circles
-circles.on("mousedown", function(d) {
-    return tooltip.text(d.name)
-            .style("visibility", "visible")
-            .style("left", (d3.event.pageX - 30) + "px")
-            .style("top", (d3.event.pageY - 12) + "px");
-    });
-
-circles.on("mouse", function() { return d3.select(this).style("opacity", "0.5"); });
-
 var tooltip = d3.select("body")
     .append("div")
     .style("position", "absolute")
     .style("z-index", "10")
     .style("visibility", "hidden");
 
-// function mouseEnter() {
-//         tooltip.text(circles.name)
-//             .style("visibility", "visible")
-//             .style("left", (d3.event.pageX - 100) + "px")
-//             .style("top", (d3.event.pageY - 100) + "px");
-// }
+// handle mouse events on circles
+circles.on("click", function(d) {
+        return tooltip.text(d.name)
+            .style("visibility", "visible")
+            .style("left", (d3.event.pageX - 30) + "px")
+            .style("top", (d3.event.pageY - 12) + "px");
+    });
 
-
-// function(d) { 
-//     return tooltip.text(d.name)
-//             .style("visibility", "visible")
-//             .style("left", (d3.event.pageX - 34) + "px")
-//             .style("top", (d3.event.pageY - 12) + "px");
-//     }
-
+circles.on("mouseout", function() { return d3.select(this).style("opacity", "0.5");});
 
 function update() {
     translateSVG()
@@ -100,6 +183,23 @@ function update() {
     circles.attr("r", function(d) { return 0.005 * Math.pow(2, map.getZoom()); })
     tooltip.style("visibility", "hidden");
 }
+
+
+//create charts of travel time/cost breakdown
+// function showGraph() {
+//     svg.selectAll('rect')
+//         .data(destinations)
+//         .enter()
+//         .append('rect')
+//         .attr('x', 80)
+//         .attr('y', function(d) {
+//             return yScale(d.name);
+//         })
+//         .attr('height', yScale.bandwidth())
+//         .attr('width', function(d) {
+//             return wScale(d.travel.martaTime)
+//         })
+// }
 
 // Adjust the circles when the map is moved
 function translateSVG() {
