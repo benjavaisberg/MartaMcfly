@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "npm test"
+    "start": "cd src && python -m http.server 8080"
   },
   "repository": {
     "type": "git",
