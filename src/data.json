@@ -1,0 +1,102 @@
+[
+
+        {"name": "Doraville", "lat": 33.903145, "lng": -84.280132,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Buckhead", "lat": 33.849121, "lng": -84.368338,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Little Five Points", "lat": 33.765097, "lng": -84.349290,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Inman Park", "lat": 33.757950, "lng": -84.352598,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Edgewood", "lat": 33.754856, "lng": -84.340974,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Old Fourth Ward", "lat": 33.764145, "lng": -84.371331,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Decatur", "lat": 33.775295, "lng": -84.282240,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Airport", "lat": 33.641215, "lng": -84.428073,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "West Manor", "lat": 33.736125, "lng": -84.493658,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Georgia Tech/Midtown", "lat": 33.774841, "lng": -84.396384,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Toco Hills", "lat": 33.815524, "lng": -84.312671,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        },
+        {"name": "Sandy Springs", "lat": 33.930876, "lng": -84.373602,
+            "travel": {
+                "martaCost": 2.5,
+                "martaTime": 27,
+                "uberCost": 14.7,
+                "uberTime": 14
+            }
+        }
+    ];
+
+
+
