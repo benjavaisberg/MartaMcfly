@@ -10,17 +10,17 @@ var destinations = [
         {"name": "Doraville", lat: 33.903145, lng: -84.280132,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
+                "martaTime": 2,
                 "uberCost": 14.7,
-                "uberTime": 14
+                "uberTime": 10
             }
         },
         {"name": "Buckhead", lat: 33.849121, lng: -84.368338,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
+                "martaTime": 16,
                 "uberCost": 14.7,
-                "uberTime": 14
+                "uberTime": 15
             }
         },
         {"name": "Little Five Points", lat: 33.765097, lng: -84.349290,
@@ -79,7 +79,7 @@ var destinations = [
                 "uberTime": 14
             }
         },
-        {"name": "Georgia Tech/Midtown", lat: 33.774841, lng: -84.396384,
+        {"name": "GT/Midtown", lat: 33.774841, lng: -84.396384,
             "travel": {
                 "martaCost": 2.5,
                 "martaTime": 27,
@@ -106,16 +106,6 @@ var destinations = [
     ];
 
 
-//Create scales for charts
-// var yScale = d3.scaleBand()
-//     .domain(['May', 'June', 'July', 'August'])
-//     .rangeRound([40,260])
-//     .padding(0.5);
-
-// var wScale = d3.scaleLinear()
-//     .domain([0, 60)
-//     .range([0,300]);
-
 
 //initiate mapbox object
 L.mapbox.accessToken = 'pk.eyJ1IjoiYmVuamF2YWlzYmVyZyIsImEiOiJjazhuZmw0c3YweHd6M2Vtd3NscXp4OTg2In0.TIzfy5d9qr7V6CQLJHczGg';
@@ -129,7 +119,7 @@ var map = new L.mapbox.map('map')
 // create circles on the map by coordinates
 destinations.forEach(function(d) {
     d.LatLng = new L.LatLng(d.lat, d.lng);
-    map.addLayer(L.circle([d.lat, d.lng], 500, {color: d.name == "Georgia Tech/Midtown" ? 'red' : '#3388ff'}))
+    map.addLayer(L.circle([d.lat, d.lng], 500, {color: d.name == "GT/Midtown" ? 'red' : '#3388ff'}))
 });
 
 
@@ -139,10 +129,6 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg")
     .attr("width", window.innerWidth)
     .attr("height", window.innerHeight);
 
-// var innerSVG = d3.select("travel-info").append("svg")
-//       .attr('class', 'graph-svg')
-//       .attr('width',window.innerWidth / 2)
-//       .attr('height',window.innerHeight / 2);
 
 // Append <g> to <svg>
 var g = svg.append("g").attr("class", "leaflet-zoom-hide");
@@ -166,13 +152,110 @@ var tooltip = d3.select("body")
     .style("z-index", "10")
     .style("visibility", "hidden");
 
+
+
+// chart SVG
+// var chartSvg = d3.select("body").append("svg")
+//       .attr('class', 'graph-svg')
+//       .attr('width',400)
+//       .attr('height',600);
+
+// Set scale stuff
+// var xScale = d3.scaleBand().range([0, 300]).padding(0.5)
+// var yScale = d3.scaleLinear().range([400, 0])
+// var g2 = chartSvg.append("g")
+//                .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
 // handle mouse events on circles
 circles.on("click", function(d) {
-        return tooltip.text(d.name)
-            .style("visibility", "visible")
-            .style("left", (d3.event.pageX - 30) + "px")
-            .style("top", (d3.event.pageY - 12) + "px");
+        // console.log(d)
+
+// Change the id of the map div to change the size
+    d3.select('#map')
+        .attr("id", "map-shrunk")
+
+// create SVG for charts
+    var timeSvg = d3.select("body").append("svg")
+      .attr('class', 'time-svg')
+      .attr('width',400)
+      .attr('height',380)
+      .style('left', d3.select("#map-shrunk").node().getBoundingClientRect().width + 5);
+
+    var costSvg = d3.select("body").append("svg")
+      .attr('class', 'cost-svg')
+      .attr('width',400)
+      .attr('height',280)
+      .style('left', d3.select("#map-shrunk").node().getBoundingClientRect().width + 5)
+      .style('top', 300);
+
+
+    var g2 = timeSvg.append("g")
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+    var g3 = costSvg.append("g")
+        .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+//Map data to array to create bar charts
+    var timeArr = [{key: 'martaTime', value: d.travel.martaTime}, {key: 'uberTime', value: d.travel.uberTime}];
+    var costArr = [{key: 'martaCost', value: d.travel.martaCost}, {key: 'uberCost', value: d.travel.uberCost}];
+
+// scale stuff
+    var xScale = d3.scaleBand().range([0, 350]).padding(0.5)
+    var xScale2 = d3.scaleBand().range([0, 350]).padding(0.5)
+    var yScale = d3.scaleLinear().range([250, 0])
+    var yScale2 = d3.scaleLinear().range([160, 0])
+    xScale.domain([timeArr[0].key, timeArr[1].key]);
+    xScale2.domain([costArr[0].key, costArr[1].key]);
+    yScale.domain([0, 35]);
+    yScale2.domain([0,30]);
+
+    g2.append("g")
+             .attr("transform", "translate(0," + 250 + ")")
+             .call(d3.axisBottom(xScale));
+
+    g3.append("g")
+             .attr("transform", "translate(0," + 160 + ")")
+             .call(d3.axisBottom(xScale2));
+
+    g2.append("g")
+     .call(d3.axisLeft(yScale).tickFormat(function(d){
+         return d;
+        }).ticks(5))
+     .append("text")
+     .attr("y", 6)
+     .attr("dy", "0.71em")
+     .attr("text-anchor", "end")
+     .text("value");
+
+     g3.append("g")
+         .call(d3.axisLeft(yScale2).tickFormat(function(d){
+             return d;
+            }).ticks(5))
+         .append("text")
+         .attr("y", 6)
+         .attr("dy", "0.71em")
+         .attr("text-anchor", "end")
+         .text("value");
+
+     var barsTime = g2.selectAll("rect")
+         .data(timeArr)
+         .enter().append("rect")
+         .attr("class", "bar")
+         .attr("x", function(d, i) {return xScale(timeArr[i].key)})
+         .attr("y", function(d) {return yScale(d.value); })
+         .attr("width", xScale.bandwidth())
+         .attr("height", function(d, i) { return 248 - yScale(timeArr[i].value); });
+
+    var barsCost = g3.selectAll("rect")
+         .data(costArr)
+         .enter().append("rect")
+         .attr("class", "bar")
+         .attr("x", function(d, i) {return xScale2(costArr[i].key)})
+         .attr("y", function(d) {return yScale2(d.value); })
+         .attr("width", xScale2.bandwidth())
+         .attr("height", function(d, i) { return yScale2(costArr[i].value) - 5;});
     });
+
 
 circles.on("mouseout", function() { return d3.select(this).style("opacity", "0.5");});
 
@@ -183,23 +266,6 @@ function update() {
     circles.attr("r", function(d) { return 0.005 * Math.pow(2, map.getZoom()); })
     tooltip.style("visibility", "hidden");
 }
-
-
-//create charts of travel time/cost breakdown
-// function showGraph() {
-//     svg.selectAll('rect')
-//         .data(destinations)
-//         .enter()
-//         .append('rect')
-//         .attr('x', 80)
-//         .attr('y', function(d) {
-//             return yScale(d.name);
-//         })
-//         .attr('height', yScale.bandwidth())
-//         .attr('width', function(d) {
-//             return wScale(d.travel.martaTime)
-//         })
-// }
 
 // Adjust the circles when the map is moved
 function translateSVG() {
