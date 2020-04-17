@@ -106,7 +106,6 @@ var destinations = [
     ];
 
 
-
 //initiate mapbox object
 L.mapbox.accessToken = 'pk.eyJ1IjoiYmVuamF2YWlzYmVyZyIsImEiOiJjazhuZmw0c3YweHd6M2Vtd3NscXp4OTg2In0.TIzfy5d9qr7V6CQLJHczGg';
 var map = new L.mapbox.map('map')
@@ -235,14 +234,39 @@ circles.on("mousedown", function(d) {
          .attr("y", function(d) {return yScale2(d.value); })
          .attr("width", xScale2.bandwidth())
          .attr("height", function(d, i) { return yScale2(costArr[i].value) - 5;});
+
+    timeSvg.append("text")
+        .attr("x", d3.select("#map-shrunk").node().getBoundingClientRect().width - 550)             
+        .attr("y", 60)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "14px") 
+        .style("text-decoration", "underline")  
+        .text("MARTA vs Uber Time Comparison from GT to: " + d.name);
+
+
+    costSvg.append("text")
+        .attr("x", d3.select("#map-shrunk").node().getBoundingClientRect().width - 550)             
+        .attr("y", 90)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "14px") 
+        .style("text-decoration", "underline")  
+        .text("MARTA vs Uber Cost Comparison from GT to: " + d.name);
+
     });
 
-circles.on("mouseout", function() { 
-  return d3.select(this).style("opacity", "0.5");
-});
 
+// circles.on("mouseout", function() { 
+//   return d3.select(this).style("opacity", "0.5");
+// });
 
 function update() {
+    d3.select(".time-svg").remove()
+    d3.select(".cost-svg").remove()
+
+// Change the id of the map div to change the size
+    d3.select('#map-shrunk')
+        .attr("id", "map")
+
     translateSVG()
     circles.attr("cx", function(d) { return map.latLngToLayerPoint(d.LatLng).x; })
     circles.attr("cy", function(d) { return map.latLngToLayerPoint(d.LatLng).y; })
