@@ -146,33 +146,15 @@ var circles = g.selectAll("circle")
         }
     });
 
-var tooltip = d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden");
+// handle mouse events when circle is clicked
+circles.on("mousedown", function(d) {
 
-
-
-// chart SVG
-// var chartSvg = d3.select("body").append("svg")
-//       .attr('class', 'graph-svg')
-//       .attr('width',400)
-//       .attr('height',600);
-
-// Set scale stuff
-// var xScale = d3.scaleBand().range([0, 300]).padding(0.5)
-// var yScale = d3.scaleLinear().range([400, 0])
-// var g2 = chartSvg.append("g")
-//                .attr("transform", "translate(" + 100 + "," + 100 + ")");
-
-// handle mouse events on circles
-circles.on("click", function(d) {
-        // console.log(d)
+  d3.select(".time-svg").remove()
+  d3.select(".cost-svg").remove()
 
 // Change the id of the map div to change the size
-    d3.select('#map')
-        .attr("id", "map-shrunk")
+  d3.select('#map')
+      .attr("id", "map-shrunk")
 
 // create SVG for charts
     var timeSvg = d3.select("body").append("svg")
@@ -187,7 +169,6 @@ circles.on("click", function(d) {
       .attr('height',280)
       .style('left', d3.select("#map-shrunk").node().getBoundingClientRect().width + 5)
       .style('top', 300);
-
 
     var g2 = timeSvg.append("g")
         .attr("transform", "translate(" + 100 + "," + 100 + ")");
@@ -256,15 +237,16 @@ circles.on("click", function(d) {
          .attr("height", function(d, i) { return yScale2(costArr[i].value) - 5;});
     });
 
+circles.on("mouseout", function() { 
+  return d3.select(this).style("opacity", "0.5");
+});
 
-circles.on("mouseout", function() { return d3.select(this).style("opacity", "0.5");});
 
 function update() {
     translateSVG()
     circles.attr("cx", function(d) { return map.latLngToLayerPoint(d.LatLng).x; })
     circles.attr("cy", function(d) { return map.latLngToLayerPoint(d.LatLng).y; })
     circles.attr("r", function(d) { return 0.005 * Math.pow(2, map.getZoom()); })
-    tooltip.style("visibility", "hidden");
 }
 
 // Adjust the circles when the map is moved
@@ -287,10 +269,3 @@ function translateSVG() {
 // Re-draw on reset, this keeps the markers where they should be on reset/zoom
 map.on("moveend", update);
 update();
-
-
-
-
-
-
-
