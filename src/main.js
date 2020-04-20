@@ -10,33 +10,33 @@ var destinations = [
         {"name": "Doraville", lat: 33.903145, lng: -84.280132,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 2,
+                "martaTime": 25,
                 "uberCost": 14.7,
-                "uberTime": 10
+                "uberTime": 15
             }
         },
         {"name": "Buckhead", lat: 33.849121, lng: -84.368338,
             "travel": {
                 "martaCost": 2.5,
                 "martaTime": 16,
-                "uberCost": 14.7,
+                "uberCost": 13,
                 "uberTime": 15
             }
         },
         {"name": "Little Five Points", lat: 33.765097, lng: -84.349290,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 37,
+                "uberCost": 12,
+                "uberTime": 10
             }
         },
         {"name": "Inman Park", lat: 33.757950, lng: -84.352598,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 30,
+                "uberCost": 9,
+                "uberTime": 11
             }
         },
         {"name": "Edgewood", lat: 33.754856, lng: -84.340974,
@@ -50,57 +50,57 @@ var destinations = [
         {"name": "Old Fourth Ward", lat: 33.764145, lng: -84.371331,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 36,
+                "uberCost": 12,
+                "uberTime": 11
             }
         },
         {"name": "Decatur", lat: 33.775295, lng: -84.282240,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 30,
+                "uberCost": 18,
+                "uberTime": 21
             }
         },
         {"name": "Airport", lat: 33.641215, lng: -84.428073,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 25,
+                "uberCost": 17,
+                "uberTime": 18
             }
         },
         {"name": "West Manor", lat: 33.736125, lng: -84.493658,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 54,
+                "uberCost": 13,
+                "uberTime": 17
             }
         },
         {"name": "GT/Midtown", lat: 33.774841, lng: -84.396384,
             "travel": {
-                "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaCost": 0,
+                "martaTime": 0,
+                "uberCost": 0,
+                "uberTime": 0
             }
         },
         {"name": "Toco Hills", lat: 33.815524, lng: -84.312671,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 58,
+                "uberCost": 16,
+                "uberTime": 18
             }
         },
         {"name": "Sandy Springs", lat: 33.930876, lng: -84.373602,
             "travel": {
                 "martaCost": 2.5,
-                "martaTime": 27,
-                "uberCost": 14.7,
-                "uberTime": 14
+                "martaTime": 30,
+                "uberCost": 13,
+                "uberTime": 20
             }
         }
     ];
@@ -155,6 +155,10 @@ circles.on("mousedown", function(d) {
   d3.select('#map')
       .attr("id", "map-shrunk")
 
+    // Testing bug fix
+
+
+
 // create SVG for charts
     var timeSvg = d3.select("body").append("svg")
       .attr('class', 'time-svg')
@@ -165,9 +169,9 @@ circles.on("mousedown", function(d) {
     var costSvg = d3.select("body").append("svg")
       .attr('class', 'cost-svg')
       .attr('width',400)
-      .attr('height',280)
+      .attr('height',380)
       .style('left', d3.select("#map-shrunk").node().getBoundingClientRect().width + 5)
-      .style('top', 300);
+      .style('top', 340);
 
     var g2 = timeSvg.append("g")
         .attr("transform", "translate(" + 100 + "," + 100 + ")");
@@ -180,21 +184,23 @@ circles.on("mousedown", function(d) {
     var costArr = [{key: 'martaCost', value: d.travel.martaCost}, {key: 'uberCost', value: d.travel.uberCost}];
 
 // scale stuff
-    var xScale = d3.scaleBand().range([0, 350]).padding(0.5)
-    var xScale2 = d3.scaleBand().range([0, 350]).padding(0.5)
-    var yScale = d3.scaleLinear().range([250, 0])
-    var yScale2 = d3.scaleLinear().range([160, 0])
+    var xScale = d3.scaleBand().range([0, 350]).padding(0.5);
+    var yScale = d3.scaleLinear().range([250, 0]);
     xScale.domain([timeArr[0].key, timeArr[1].key]);
+    yScale.domain([0, 50]);
+
+
+    var xScale2 = d3.scaleBand().range([0, 350]).padding(0.5)
+    var yScale2 = d3.scaleLinear().range([250, 0])
     xScale2.domain([costArr[0].key, costArr[1].key]);
-    yScale.domain([0, 35]);
-    yScale2.domain([0,30]);
+    yScale2.domain([0,25]);
 
     g2.append("g")
              .attr("transform", "translate(0," + 250 + ")")
              .call(d3.axisBottom(xScale));
 
     g3.append("g")
-             .attr("transform", "translate(0," + 160 + ")")
+             .attr("transform", "translate(0," + 250 + ")")
              .call(d3.axisBottom(xScale2));
 
     g2.append("g")
@@ -233,7 +239,7 @@ circles.on("mousedown", function(d) {
          .attr("x", function(d, i) {return xScale2(costArr[i].key)})
          .attr("y", function(d) {return yScale2(d.value); })
          .attr("width", xScale2.bandwidth())
-         .attr("height", function(d, i) { return yScale2(costArr[i].value) - 5;});
+         .attr("height", function(d, i) { return 248 - yScale2(costArr[i].value); });
 
     timeSvg.append("text")
         .attr("x", d3.select("#map-shrunk").node().getBoundingClientRect().width - 550)             
